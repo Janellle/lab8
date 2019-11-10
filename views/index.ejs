@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>US Quiz (Express)</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script>
+    $(document).ready(function(){
+      //Event Listeners
+      $(".q5choice").on("click", function(){
+      	 $(".q5choice").css("background-color",""); //resets background color
+      	 $(this).css("background-color","rgb(255, 255, 0)"); 
+      	 $("#q5").val($(this).attr("id"));//use to pass to the server the id of the image clicked on
+      })
+      
+      $(".q6choice").on("click", function(){
+      	 $(".q6choice").css("background-color",""); //resets background color
+      	 $(this).css("background-color","rgb(255, 255, 0)"); 
+      	 $("#q6").val($(this).attr("id"));//use to pass to the server the id of the image clicked on
+      })
+      
+      
+      $("#submitBtn").on("click", function(){
+        $.ajax({
+  
+              method: "GET",
+              url: "/gradeQuiz",
+              dataType: "json",
+              data: {  "q1": $("#q1").val(),
+                       "q2": $("#q2").val(),
+                      "q3a": $("#q3a").is(":checked"),
+                      "q3b": $("#q3b").is(":checked"),
+                      "q3c": $("#q3c").is(":checked"),
+                      "q3d": $("#q3d").is(":checked"),
+                       "q4": $("input[name=q4]:checked").val(),
+                       "q5": $("#q5").val(),
+                       "q6": $("#q6").val(),
+                       "q7": $("#q7").val(),
+                      "q8a": $("#q8a").is(":checked"),
+                      "q8b": $("#q8b").is(":checked"),
+                      "q8c": $("#q8c").is(":checked"),
+                      "q8d": $("#q8d").is(":checked")
+                       
+              },
+              success: function(result,status) {
+                $("#totalScore").html("Total Score: " + result.score);
+                $("#message").html(result.message);
+                for (let i=0; i < 8; i++) {
+                   $(`#q${i+1}Feedback`).html(result.feedback[i].fback);
+                }
+              }
+        
+        });//ajax
+      });//submitBtn
+      
+      
+    })//ready
+  </script>
+
+</head>
+<body class="text-center">
+
+  <h1 class="jumbotron"> US Geography Quiz <br> Express Version </h1>
+  
+  <!--<form>-->
+  
+  <h3><span id="markImg1"></span> Question #1: What is the capital of California?</h3>
+  <input type="text" id="q1" name="q1" value="">
+  <br><br>
+   <div id="q1Feedback"></div>
+  <br>
+
+  <h3><span id="markImg2"></span>Question #2: What is the longest river?</h3>
+    <select id="q2" name="q2">
+        <option selected value="">Select One</option>
+        <option value="ms">Mississippi</option>
+        <option value="mo">Missouri</option>
+        <option value="co">Colorado</option>
+        <option value="de">Delaware</option>
+    </select>
+    <br><br>
+  <div id="q2Feedback"></div>
+  <br>
+
+    <h3><span id="markImg3"></span>Question #3: What presidents are carved into mount Rushmore?</h3>
+    <input type="checkbox" name="q3a" id="q3a"> <label for="q3a"> A. Jackson    </label> 
+    <input type="checkbox" name="q3b" id="q3b"> <label for="q3b">B. Franklin  </label>
+    <input type="checkbox" name="q3c" id="q3c"> <label for="q3c">T. Jefferson</label>
+    <input type="checkbox" name="q3d" id="q3d"> <label for="q3d">T. Roosevelt</label>
+    <br><br>
+    <div id="q3Feedback"></div>
+    <br>
+
+	<h3><span id="markImg4"></span>Question #4: What is the smallest US state?</h3>
+	<div id="choices"> 
+	
+	  <% q3Choices.forEach(function(choice){ %>
+	  
+	  <input type="radio" name="q4" value="<%=choice%>" id="<%=choice%>"> <label for="<%=choice%>"> <%=choice.toUpperCase()%> </label>
+	  
+	  <% }) %>
+	
+	</div>
+    <br><br>
+    <div id="q4Feedback"></div>
+    <br>
+    
+    <h3><span id="markImg5"></span>Question #5: Which is the correct seal of California?</h3>
+    <img src="/img/seal1.png" alt= "seal1" class="q5choice" id="seal1">
+    <img src="/img/seal2.png" alt= "seal2" class="q5choice" id="seal2">
+    <img src="/img/seal3.png" alt= "seal3" class="q5choice" id="seal3">
+
+    <input type="hidden" id="q5" />
+    
+	<br><br>
+    <div id="q5Feedback"></div>
+    <br>
+    
+    <h3><span id="markImg6"></span>Question #6: Which state has the largest population?</h3>
+    <img src="/img/cali.png" alt="cali"  class="q6choice" id="cali">
+    <img src="/img/texas.png"alt="texas" class="q6choice" id="texas">
+    <img src="/img/ny.png"   alt="ny"    class="q6choice" id="ny">
+
+    <input type="hidden" id="q6" />
+    
+    <br><br>
+    <div id="q6Feedback"></div>
+    <br>
+        
+    <h3><span id="markImg7"></span>Question #7: What is the 47th state in the US?</h3>
+    <select id="q7" name="q7">
+        <option selected value="">Select One</option>
+        <option value="ak">Alaska</option>
+        <option value="nm">New Mexico</option>
+        <option value="hi">Hawaii</option>
+        <option value="az">Arizona</option>
+    </select></h4>
+    
+    <div id="q7Feedback"></div>
+    <br><br>
+    
+    <h3><span id="markImg8"></span>Question #8: What is the first and third state in the US?</h3>
+    <input type="checkbox" name="q8a" id="q8a"> <label for="q8a"> Delaware    </label> 
+    <input type="checkbox" name="q8b" id="q8b"> <label for="q8b"> New Jersey  </label>
+    <input type="checkbox" name="q8c" id="q8c"> <label for="q8c"> Washington  </label>
+    <input type="checkbox" name="q8d" id="q8d"> <label for="q8d"> Pennsylvania</label>
+    <br><br>
+    <span id="q8Feedback"></span>
+    <br>
+
+    <button id="submitBtn" class="btn btn-outline-success"> Submit Quiz </button>
+    <br><br>
+
+    <h2 id="totalScore" class="text-info">Total Score:  </h2>
+   
+    <h2 id="message" class="message"> </h2>
+   <!--</form>-->
+   
+   <link href="/css/styles.css" rel="stylesheet" />
+   
+</body>
+</html>

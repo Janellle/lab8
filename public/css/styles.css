@@ -1,0 +1,14 @@
+.jumbotron {
+    background-color: lightblue;
+    border-color: lightblue;
+    border-radius: 50px;
+    width: 30%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+body {
+    text-align: center;
+    font-family: 'Julius Sans One', sans-serif;
+    background-color: #CDA5DC;
+}
